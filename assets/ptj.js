@@ -85,20 +85,26 @@ modalCloses.forEach((modalClose) => {
   });
 });
 
-/*======================= Portfolio Swiper ===================*/
-var swiper = new Swiper(".portfolio__container", {
-  cssMode: true,
-  loop: true,
+/*======================= Project Card Reveal ===================*/
+const projectCards = document.querySelectorAll(".project-card");
+if (
+  "IntersectionObserver" in window &&
+  !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+) {
+  const projectCardObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
 
-  navigation: {
-    nextEl: ".swiper-button-next",
-    prevEl: ".swiper-button-prev",
-  },
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-  },
-});
+  projectCards.forEach((card) => {
+    card.classList.add("project-card--reveal");
+    projectCardObserver.observe(card);
+  });
+}
 
 /*==================== SCROLL SECTIONS ACTIVE LINK ====================*/
 const sections = document.querySelectorAll("section[id]");
